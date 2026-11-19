@@ -12,8 +12,9 @@ The module is for kernels where the `macsmc` drivers own the System Management C
 | Build for t2linux 7.3.4-3 and 7.3.5-1 | pass |
 | `probe=1` on a MacBookAir9,1, bridgeOS 24.16.6005, t2linux 7.3.4-3 | `ready` |
 | `publish=1` on the same machine | `response-received:1` |
-| t2touch on top of it | services up, status `ready`, the enrolled fingerprints are listed |
-| Publishing at boot, through the `softdep` line | not run yet |
+| Publishing at boot, through the `softdep` line | `response-received:1`, 19 seconds into the boot, right before `t2_sep_transport` |
+| t2touch on top of it | services up, status `ready`, fingerprint match after a reboot |
+| Suspend and resume | not tested |
 
 ## Why a module
 
@@ -90,6 +91,8 @@ To run it at every boot, put the option into `/etc/modprobe.d/t2-sep-boot-state.
 options t2_sep_boot_state publish=1
 softdep t2_sep_transport pre: t2_sep_boot_state
 ```
+
+The t2touch installer (0.1.2) does not know this module. It looks for its own publisher, and on a `macsmc` kernel it stops when that publisher fails to build. Until t2touch supports the module, its installer needs a patch that reads the result file above.
 
 ### Parameters
 
