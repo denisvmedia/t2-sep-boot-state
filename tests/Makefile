@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-2.0-only
+# SPDX-License-Identifier: GPL-2.0-only OR MIT
 # Unit tests for the transaction. They build the same boot_state.c as the
 # kernel module, with the address and undefined-behavior sanitizers.
 CC ?= cc

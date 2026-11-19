@@ -132,7 +132,9 @@ make W=1        # the module, with extra kernel warnings
 
 ## License and credits
 
-GPL-2.0-only, see [LICENSE](LICENSE).
+Your choice of GPL-2.0-only ([LICENSE-GPL-2.0](LICENSE-GPL-2.0)) or MIT ([LICENSE-MIT](LICENSE-MIT)). The `macsmc` drivers use the same pair.
+
+The code in this repository was written for it. The transaction it performs (the order of the writes, the values and the result names) was learned from the `applesmc` patch of t2touch, which is GPL-2.0-only.
 
 - [t2touch](https://github.com/macintog/t2touch) worked out the transaction and has run it through `applesmc`.
 - [t2linux](https://t2linux.org) brought the `macsmc` drivers to T2 Macs.
