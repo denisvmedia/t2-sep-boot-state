@@ -10,8 +10,10 @@ The module is for kernels where the `macsmc` drivers own the System Management C
 |---|---|
 | Unit tests of the transaction, with memory sanitizers | pass |
 | Build for t2linux 7.3.4-3 and 7.3.5-1 | pass |
-| `probe=1` on a MacBookAir9,1, bridgeOS 24.16.6005 | `ready` |
-| `publish=1` on real hardware | not run yet |
+| `probe=1` on a MacBookAir9,1, bridgeOS 24.16.6005, t2linux 7.3.4-3 | `ready` |
+| `publish=1` on the same machine | `response-received:1` |
+| t2touch on top of it | services up, status `ready`, the enrolled fingerprints are listed |
+| Publishing at boot, through the `softdep` line | not run yet |
 
 ## Why a module
 
