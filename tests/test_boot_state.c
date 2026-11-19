@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only OR MIT
 /*
+ * Copyright (C) 2026 Denis Vojtuk
+ *
  * Unit tests for boot_state.c with a fake SMC.
  *
  * Build and run with "make test". The build turns on the address and

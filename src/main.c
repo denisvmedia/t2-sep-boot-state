@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only OR MIT
 /*
+ * Copyright (C) 2026 Denis Vojtuk
+ *
  * t2-sep-boot-state: tell the Secure Enclave of an Apple T2 chip that the
  * system has booted, on kernels where the macsmc drivers own the SMC.
  *
@@ -246,6 +248,6 @@ module_exit(t2bs_exit);
 
 MODULE_SOFTDEP("pre: macsmc-acpi");
 MODULE_DESCRIPTION("Publish the Apple T2 SEP boot state through macsmc");
-MODULE_AUTHOR("Denis V");
+MODULE_AUTHOR("Denis Vojtuk");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.1.0");

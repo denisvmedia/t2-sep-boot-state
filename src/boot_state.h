@@ -1,5 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only OR MIT */
 /*
+ * Copyright (C) 2026 Denis Vojtuk
+ *
  * The T2 SEP boot-state transaction.
  *
  * This part has no kernel dependencies. The kernel module and the unit tests
