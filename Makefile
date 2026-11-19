@@ -27,7 +27,9 @@ dkms-install:
 	install -d $(DKMS_SRC)/src
 	install -m 0644 Kbuild dkms.conf LICENSE-GPL-2.0 LICENSE-MIT $(DKMS_SRC)/
 	install -m 0644 src/main.c src/boot_state.c src/boot_state.h $(DKMS_SRC)/src/
-	dkms install t2-sep-boot-state/$(VERSION)
+	# --force rebuilds and replaces a copy of the same version.
+	dkms build --force t2-sep-boot-state/$(VERSION)
+	dkms install --force t2-sep-boot-state/$(VERSION)
 
 dkms-remove:
 	dkms remove t2-sep-boot-state/$(VERSION) --all
