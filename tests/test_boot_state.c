@@ -546,6 +546,29 @@ static void test_answer_at_last_poll(void)
 	CHECK(r.response == 1);
 }
 
+/* The key size normally comes from the size field. */
+static void test_key_info_size(void)
+{
+	/* A correct kernel: size and flags as the SMC reports them. */
+	CHECK(t2bs_key_info_size(32, 0xc4) == 32);
+	CHECK(t2bs_key_info_size(1, 0xc0) == 1);
+	CHECK(t2bs_key_info_size(1, 0xd0) == 1);
+	CHECK(t2bs_key_info_size(1, 0) == 1);
+	CHECK(t2bs_key_info_size(255, 0x20) == 255);
+
+	/* t2linux 7.3.5-1: size zero, the real size in the flags field. */
+	CHECK(t2bs_key_info_size(0, 32) == 32);
+	CHECK(t2bs_key_info_size(0, 1) == 1);
+
+	/* Nothing usable at all stays zero, which no expected size matches. */
+	CHECK(t2bs_key_info_size(0, 0) == 0);
+
+	/* A zero size next to real flags gives a wrong size, and a rejection. */
+	CHECK(t2bs_key_info_size(0, 0xc4) != T2BS_EFMV_LEN);
+	CHECK(t2bs_key_info_size(0, 0xc0) != T2BS_STATE_LEN);
+	CHECK(t2bs_key_info_size(0, 0xd0) != T2BS_STATE_LEN);
+}
+
 static void test_build_efmv(void)
 {
 	static const u32 version[T2BS_VERSION_FIELDS] = {
@@ -789,6 +812,7 @@ int main(void)
 	test_timeout_slow_sleep();
 	test_timeout_stuck_clock();
 	test_answer_at_last_poll();
+	test_key_info_size();
 	test_build_efmv();
 	test_parse();
 	test_parse_random();

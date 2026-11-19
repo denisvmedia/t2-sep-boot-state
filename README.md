@@ -11,6 +11,7 @@ The module is for kernels where the `macsmc` drivers own the System Management C
 | Unit tests of the transaction, with memory sanitizers | pass |
 | Build for t2linux 7.3.4-3 and 7.3.5-1 | pass |
 | `probe=1` on a MacBookAir9,1, bridgeOS 24.16.6005, t2linux 7.3.4-3 | `ready` |
+| `probe=1` on the same machine, t2linux 7.3.5-1 | `ready` with 0.1.1, `rejected` with 0.1.0 (see [Kernel notes](#kernel-notes)) |
 | `publish=1` on the same machine | `response-received:1` |
 | Publishing at boot, through the `softdep` line | `response-received:1`, 19 seconds into the boot, right before `t2_sep_transport` |
 | t2touch on top of it | services up, status `ready`, fingerprint match after a reboot |
@@ -75,8 +76,10 @@ Check that the transaction could run. This writes nothing, and the module can be
 ```sh
 sudo modprobe t2_sep_boot_state probe=1
 cat /sys/module/t2_sep_boot_state/parameters/result    # ready
-sudo modprobe -r t2_sep_boot_state
+sudo rmmod t2_sep_boot_state
 ```
+
+Unload it with `rmmod`. `modprobe -r` also removes modules that the one it unloads depends on, when nothing else uses them.
 
 Run the transaction once in this boot:
 
@@ -119,6 +122,16 @@ The t2touch installer (0.1.2) does not know this module. It looks for its own pu
 | `response-received:N` | The T2 chip answered with `N`. t2touch treats `1` as the normal answer and `3` as a request to reboot | yes |
 
 The kernel log (`dmesg`) has one line with the same outcome and the error code.
+
+## Kernel notes
+
+- **t2linux 7.3.5-1** reads the key information of a T2 Mac from the wrong registers. Every key reports a size of zero, and the real size sits in the flags field. Version 0.1.0 saw a wrong size and refused to write (`rejected`). From 0.1.1 on, the module takes the size from the flags field when the size is zero, and still compares it with the size it expects.
+- The module must load after `macsmc-acpi`, which loads by itself at boot. If it loads earlier, the result is `not-applicable`, and nothing is written.
+
+## Changes
+
+- **0.1.1**: works on t2linux 7.3.5-1. No soft dependency on `macsmc-acpi` anymore: with it, `modprobe -r t2_sep_boot_state` also unloaded the SMC driver, and the fan control with it. If you have 0.1.0, update.
+- **0.1.0**: first version.
 
 ## How the code guards against memory errors
 

@@ -36,6 +36,21 @@
 _Static_assert(T2BS_EFMV_VERSION_AT + T2BS_VERSION_FIELDS * T2BS_EFMV_FIELD_LEN <=
 	       T2BS_EFMV_LEN, "the version fields must fit into EFMV");
 
+/**
+ * t2bs_key_info_size - the size of a key, from the kernel's key information
+ * @size: the size field of the key information
+ * @flags: the flags field of the key information
+ *
+ * The t2linux 7.3.5-1 kernel reads the key information of a T2 Mac from the
+ * wrong registers: the size comes back as zero, and the real size sits in the
+ * flags field. No SMC key has a size of zero, so in that case the size is
+ * taken from the flags. The caller still compares it with the size it expects.
+ */
+u8 t2bs_key_info_size(u8 size, u8 flags)
+{
+	return size ? size : flags;
+}
+
 /*
  * Parse one unsigned decimal number: digits only, at least one, no overflow.
  * Returns the position after the number, or NULL.

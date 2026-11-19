@@ -11,6 +11,10 @@
  * it only checks that the transaction could run, and writes nothing.
  *
  * The module takes no data from user space apart from its parameters.
+ *
+ * It declares no soft dependency on macsmc-acpi on purpose: "modprobe -r"
+ * removes soft dependencies as well, and that would unload the SMC driver,
+ * and the fan control with it. macsmc-acpi loads by itself at boot.
  */
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
@@ -104,7 +108,7 @@ static int t2bs_smc_key_size(void *ctx, u32 key, u8 *size)
 	if (ret < 0)
 		return ret;
 
-	*size = info.size;
+	*size = t2bs_key_info_size(info.size, info.flags);
 	return 0;
 }
 
@@ -246,8 +250,7 @@ static void __exit t2bs_exit(void)
 }
 module_exit(t2bs_exit);
 
-MODULE_SOFTDEP("pre: macsmc-acpi");
 MODULE_DESCRIPTION("Publish the Apple T2 SEP boot state through macsmc");
 MODULE_AUTHOR("Denis Vojtuk");
 MODULE_LICENSE("Dual MIT/GPL");
-MODULE_VERSION("0.1.0");
+MODULE_VERSION("0.1.1");

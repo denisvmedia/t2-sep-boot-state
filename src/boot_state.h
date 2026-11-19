@@ -81,6 +81,7 @@ struct t2bs_smc_ops {
 	void (*sleep_ms)(void *ctx, unsigned int ms);
 };
 
+u8 t2bs_key_info_size(u8 size, u8 flags);
 int t2bs_parse_bridge_version(const char *bios_version,
 			      u32 version[T2BS_VERSION_FIELDS]);
 void t2bs_build_efmv(u8 efmv[T2BS_EFMV_LEN],
